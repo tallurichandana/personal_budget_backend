@@ -26,30 +26,23 @@ app.use(bodyParser.json());
 app.use(compression());
 
 
-app.get('/api/data', (req, res) => {
-  connection.query('SELECT * FROM your_table', (error, results) => {
-    if (error) throw error;
-    res.json(results);
-  });
-});
-
-app.post('/signup', (req, res) => {
+app.post('/register', (req, res) => {
   const { username, email, password } = req.body;
-  console.log('Inside server signup');
+  //console.log('Inside server signup');
   
   const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
   connection.query(sql, [username, email, password], (err, result) => {
     if (err) {
-      console.error('Error inserting user:', err);
-      res.status(500).send('Error inserting user');
+      console.error('Error inserting', err);
+      res.status(500).send('Error inserting');
       return;
     }
     console.log('User inserted:', result);
-    res.status(200).send('User inserted successfully');
+    res.status(200).send('User inserted');
   });
 });
 
-app.post('/login', (req, res) => {
+app.post('/loggingIn', (req, res) => {
   const { username, password } = req.body;
   console.log('Inside server login');
 
@@ -57,8 +50,8 @@ app.post('/login', (req, res) => {
   const sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
   connection.query(sql, [username, password], (err, result) => {
     if (err) {
-      console.error('Error checking user credentials:', err);
-      res.status(500).send('Error checking user credentials');
+      console.error('Error checking :', err);
+      res.status(500).send('Error checking');
       return;
     }
 
@@ -76,7 +69,7 @@ app.post('/login', (req, res) => {
 });
 
 
-app.post('/refreshToken', (req, res) => {
+app.post('/refreshingToken', (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
 
   jwt.verify(token, 'secret', (err, decoded) => {
@@ -135,7 +128,7 @@ app.post('/addBudget', (req, res) => {
 });
 
 
-app.post('/addCapacity', (req, res) => {
+app.post('/addLimit', (req, res) => {
   const { username, month, item, capacity } = req.body;
 
   const selectQuery = `
